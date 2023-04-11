@@ -17,7 +17,7 @@ function Home() {
             sessionStorage.removeItem("authToken")
             dispatch(ResetState())
             navigate("/login");
-            console.log("Signed out successfully")
+            // console.log("Signed out successfully")
         }).catch((error) => {
             // An error happened.
         });
@@ -28,21 +28,26 @@ function Home() {
                 <Typography color="white" variant="h3" component="h3">
                     Hello World
                 </Typography>
-                <br />
-                <Button variant="contained" color="success" onClick={handleLogout}>Logout</Button>
+
             </Box>
             <Box sx={{ m: 3, marginTop: "50px", display: "flex", flexDirection: "column", gap: "10px" }}>
-                <Typography variant="h5" component="h5">
-                    Created by Vaishak J Nair
+                <Typography variant="h4" component="h4">
+                    Created by <span style={{ color: "yellow" }}>Vaishak J Nair</span>
                 </Typography>
                 <Typography color="white" variant="h5" component="a" href="https://github.com/Vaishak-JN/React-firebase-login-system" target="_blank">
                     View source code on Github
                 </Typography>
 
                 <Typography variant="h5" component="h5">
-                    Made using React,Redux Toolkit,Formik,Yup,Firebase,React Router and Material UI
+                    Made using React, Redux Toolkit, Firebase, React Router, React Toastify and Material UI
                 </Typography>
 
+
+            </Box>
+            <br />
+            <Box sx={{ m: 3 }}>
+
+                <Button variant="contained" color="error" onClick={handleLogout}>Logout</Button>
             </Box>
 
         </>

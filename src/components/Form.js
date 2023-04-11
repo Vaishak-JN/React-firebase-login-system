@@ -1,28 +1,24 @@
 import { useState } from "react"
-import classes from "./Login.module.css"
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import { TextField, Paper } from "@mui/material";
+import { TextField, Paper, Box, Card, CardActions, CardContent, Button, Typography } from "@mui/material";
 import { app, auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useDispatch } from "react-redux";
 import { SetToken, SetUser } from "../redux/usersSlice";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import GoogleIcon from '@mui/icons-material/Google';
+import { useFormik } from "formik"
+import * as yup from 'yup';
 
 
+export const formValidationSchema = yup.object({
+    email: yup.string().required("Enter a valid email").email('must be a valid email'),
+    password: yup.string().required("Enter a password").min(5, "password must be atleast 5 characters"),
+})
 
 
-
-
-const Login = () => {
+const Form = ({ title, type }) => {
 
     const dispatch = useDispatch()
 
@@ -33,6 +29,26 @@ const Login = () => {
 
     const gAuth = getAuth()
     const provider = new GoogleAuthProvider();
+
+
+    // const { handleSubmit, values, handleBlur, handleChange, errors, touched } = useFormik({
+    //     initialValues: {
+    //         email: "",
+    //         password: ""
+    //     },
+    //     // using yup
+    //     validationSchema: formValidationSchema,
+    //     onSubmit: (e) => {
+    //         e.preventDefault()
+    //         if (type === "login") {
+    //             handleLogin()
+    //         } else {
+    //             handleRegister()
+    //         }
+    //     }
+
+
+    // })
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value)
@@ -51,12 +67,7 @@ const Login = () => {
                 // The signed-in user info.
                 const user = result.user;
                 // IdP data available using getAdditionalUserInfo(result)
-                // ...
 
-                // console.log("result", result)
-                // console.log("credential", credential)
-                // console.log("token", result)
-                // console.log("user", result)
 
                 sessionStorage.setItem('authToken', result._tokenResponse.refreshToken)
                 dispatch(SetToken(result._tokenResponse.refreshToken))
@@ -77,7 +88,7 @@ const Login = () => {
 
     }
 
-    const handleSubmit = (e) => {
+    const handleLogin = (e) => {
         e.preventDefault();
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
@@ -88,7 +99,7 @@ const Login = () => {
                 const user = userCredential.user;
                 dispatch(SetUser(user))
                 navigate("/")
-                console.log(user);
+                // console.log(user);
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -98,29 +109,61 @@ const Login = () => {
             });
     }
 
+    const handleRegister = async (e) => {
+        e.preventDefault()
+        // console.log("submit")
+        await createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // Signed in
+                const user = userCredential.user;
+                // console.log(user);
+                setEmail("")
+                setPassword("")
+                navigate("/login")
+                // ...
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                // console.log(errorCode, errorMessage);
+
+                toast.error(errorMessage, { position: "top-center", autoClose: 2000 })
+                // ..
+            });
+    }
+
+
+
     return (
         <Paper elevation={5} className="paper">
             <Card sx={{ minWidth: 500 }}>
                 <CardContent>
                     <Typography variant="h3" component="h3">
-                        Login
+                        {title}
                     </Typography>
                     <br />
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={type === "login" ? handleLogin : handleRegister}>
                         <TextField fullWidth size="medium"
-                            // onBlur={handleBlur} 
-                            id="email" name="email" value={email} onChange={handleEmailChange} label="Email" type="email" required sx={{ marginBottom: "20px" }}
-                        // error={errors.name && touched.name} 
-                        />
+                            // onBlur={handleBlur}
+                            id="email" name="email" value={email} onChange={handleEmailChange} label="Email" type="email" required sx={{}}
+                        // error={errors.email && touched.email}
 
-                        <TextField fullWidth size="medium"
-                            // onBlur={handleBlur} 
-                            id="password" name="password" value={password} onChange={handlePasswordChange} label="Password" type="password" required sx={{ marginBottom: "20px" }}
-                        // error={errors.name && touched.name} 
                         />
+                        {/* {errors.email && touched.email && <Typography color="error" variant="p" component="p">{errors.email}</Typography>} */}
+                        <TextField fullWidth size="medium"
+                            // onBlur={handleBlur}
+                            id="password" name="password" value={password} onChange={handlePasswordChange} label="Password" type="password" required sx={{ marginTop: "20px" }}
+                        // error={errors.password && touched.password}
+                        />
+                        {/* {errors.password && touched.password && <Typography color="error" variant="p" component="p">{errors.password}</Typography>} */}
                         <br />
-                        <Button type="submit" variant="contained" color="primary">Login</Button>
-                        {/* <button>Submit</button> */}
+                        <Button type="submit" variant="contained" color="primary" sx={{ marginTop: "20px" }}>{type}</Button>
+                        <Button type="submit" variant="contained" color="secondary" sx={{ marginTop: "20px", marginLeft: "20px" }}
+                            onClick={() => navigate(type === "login" ? "/register" : "/login")}
+                        >
+                            {type === "login" ? "Register" : "Login"}
+                        </Button>
+
                     </form>
 
                     <Typography sx={{ margin: "10px 0" }} variant="h6" component="h6">
@@ -135,4 +178,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default Form
