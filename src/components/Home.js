@@ -32,14 +32,14 @@ function Home() {
             </Box>
             <Box sx={{ m: 3, marginTop: "50px", display: "flex", flexDirection: "column", gap: "10px" }}>
                 <Typography variant="h4" component="h4">
-                    Created by <span style={{ color: "yellow" }}>Vaishak J Nair</span>
+                    Created by <a style={{ color: "yellow" }} href="https://vaishakj-portfolio.netlify.app/" target="_blank" >Vaishak J Nair</a>
                 </Typography>
                 <Typography color="white" variant="h5" component="a" href="https://github.com/Vaishak-JN/React-firebase-login-system" target="_blank">
                     View source code on Github
                 </Typography>
 
                 <Typography variant="h5" component="h5">
-                    Made using React, Redux Toolkit, Material UI, React Router,React Toastify, Formik, Yup and Firebase
+                    Made using React, Redux Toolkit, Material UI, React Router,React Toastify, Formik, Yup and Firebase.
                 </Typography>
 
 

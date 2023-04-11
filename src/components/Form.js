@@ -160,7 +160,7 @@ const Form = ({ title, type }) => {
                         OR
                     </Typography>
 
-                    <Button type="button" size="large" sx={{ backgroundColor: "#c62828" }} variant="contained" onClick={googleSignIn}>Login with Google  <GoogleIcon /></Button>
+                    <Button type="button" size="large" color="error" variant="contained" onClick={googleSignIn}>Login with Google  <GoogleIcon /></Button>
                 </CardContent>
 
             </Card>
