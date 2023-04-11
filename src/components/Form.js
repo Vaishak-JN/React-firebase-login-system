@@ -124,28 +124,30 @@ const Form = ({ title, type }) => {
 
     return (
         <Paper elevation={5} className="paper">
-            <Card sx={{ minWidth: 500 }}>
+            <Card sx={{ minWidth: 500 }} className="card">
                 <CardContent>
                     <Typography variant="h3" component="h3">
                         {title}
                     </Typography>
                     <br />
                     <form onSubmit={type === "login" ? handleLogin : handleRegister}>
-                        <TextField fullWidth size="medium"
-                            onBlur={handleBlur}
-                            id="email" name="email" value={values.email} onChange={handleChange} label="Email" type="email" required sx={{}}
-                            error={errors.email && touched.email}
 
-                        />
+                        <TextField fullWidth size="medium" onBlur={handleBlur} id="email" name="email" value={values.email}
+                            onChange={handleChange} label="Email" type="email" required error={errors.email && touched.email} />
+
                         {errors.email && touched.email && <Typography color="error" variant="p" component="p">{errors.email}</Typography>}
-                        <TextField fullWidth size="medium"
-                            onBlur={handleBlur}
-                            id="password" name="password" value={values.password} onChange={handleChange} label="Password" type="password" required sx={{ marginTop: "20px" }}
+
+                        <TextField fullWidth size="medium" onBlur={handleBlur} id="password" name="password" value={values.password}
+                            onChange={handleChange} label="Password" type="password" required sx={{ marginTop: "20px" }}
                             error={errors.password && touched.password}
                         />
+
                         {errors.password && touched.password && <Typography color="error" variant="p" component="p">{errors.password}</Typography>}
+
                         <br />
-                        <Button type="submit" variant="contained" color="primary" sx={{ marginTop: "20px" }}>{type}</Button>
+
+                        <Button type="submit" variant="contained" color="primary" sx={{ marginTop: "20px" }} >{type}</Button>
+
                         <Button type="submit" variant="contained" color="secondary" sx={{ marginTop: "20px", marginLeft: "20px" }}
                             onClick={() => navigate(type === "login" ? "/register" : "/login")}
                         >
@@ -157,6 +159,7 @@ const Form = ({ title, type }) => {
                     <Typography sx={{ margin: "10px 0" }} variant="h6" component="h6">
                         OR
                     </Typography>
+
                     <Button type="button" size="large" sx={{ backgroundColor: "#c62828" }} variant="contained" onClick={googleSignIn}>Login with Google  <GoogleIcon /></Button>
                 </CardContent>
 

@@ -19,3 +19,18 @@ body {
   width:40vw;
   margin:4em auto;
 }
+
+@media screen and (max-width:800px) {
+  .paper{
+    width:90% !important;
+  }
+  h3{
+    font-size: 24px !important;
+  }
+  button,h6{
+    font-size: 12px !important;
+  }
+  .card{
+    min-width: 90% !important;
+  }
+}
