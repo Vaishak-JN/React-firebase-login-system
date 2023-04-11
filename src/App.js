@@ -1,10 +1,17 @@
+import { Routes, Route } from 'react-router-dom';
 import './App.css';
+import Home from './components/Home';
+import Register from './components/Register';
+import Login from './components/Login';
+import RequireAuth from './components/RequireAuth';
 
 function App() {
   return (
-    <div className="App">
-      Hello World
-    </div>
+    <Routes>
+      <Route path="/" element={<RequireAuth><Home /></RequireAuth>} />
+      <Route path="register" element={<Register />} />
+      <Route path="login" element={<Login />} />
+    </Routes>
   );
 }
 

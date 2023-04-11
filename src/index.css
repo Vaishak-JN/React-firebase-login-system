@@ -3,7 +3,19 @@
     padding: 0
 }
 body {
-  margin: 0;
-  padding:0
+  background-color: rgb(53, 101, 211);
 }
 
+.form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  /* background: rgba(76, 91, 116, 0.759) */
+}
+
+.paper{
+  width:40vw;
+  margin:4em auto;
+}
