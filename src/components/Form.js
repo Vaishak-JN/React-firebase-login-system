@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { TextField, Paper, Box, Card, CardActions, CardContent, Button, Typography } from "@mui/material";
 import { app, auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
@@ -21,41 +20,30 @@ export const formValidationSchema = yup.object({
 const Form = ({ title, type }) => {
 
     const dispatch = useDispatch()
-
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-
     const navigate = useNavigate();
 
     const gAuth = getAuth()
     const provider = new GoogleAuthProvider();
 
 
-    // const { handleSubmit, values, handleBlur, handleChange, errors, touched } = useFormik({
-    //     initialValues: {
-    //         email: "",
-    //         password: ""
-    //     },
-    //     // using yup
-    //     validationSchema: formValidationSchema,
-    //     onSubmit: (e) => {
-    //         e.preventDefault()
-    //         if (type === "login") {
-    //             handleLogin()
-    //         } else {
-    //             handleRegister()
-    //         }
-    //     }
+    const { handleSubmit, values, handleBlur, handleChange, errors, touched, handleReset } = useFormik({
+        initialValues: {
+            email: "",
+            password: ""
+        },
+        // using yup
+        validationSchema: formValidationSchema,
+        onSubmit: values => {
+            // e.preventDefault()
+            if (type === "login") {
+                handleLogin()
+            } else {
+                handleRegister()
+            }
+        }
 
 
-    // })
-
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value)
-    }
-    const handlePasswordChange = (e) => {
-        setPassword(e.target.value)
-    }
+    })
 
     const googleSignIn = () => {
 
@@ -90,7 +78,7 @@ const Form = ({ title, type }) => {
 
     const handleLogin = (e) => {
         e.preventDefault();
-        signInWithEmailAndPassword(auth, email, password)
+        signInWithEmailAndPassword(auth, values.email, values.password)
             .then((userCredential) => {
                 // Signed in
                 sessionStorage.setItem('authToken', userCredential._tokenResponse.refreshToken)
@@ -112,13 +100,13 @@ const Form = ({ title, type }) => {
     const handleRegister = async (e) => {
         e.preventDefault()
         // console.log("submit")
-        await createUserWithEmailAndPassword(auth, email, password)
+        await createUserWithEmailAndPassword(auth, values.email, values.password)
             .then((userCredential) => {
                 // Signed in
                 const user = userCredential.user;
-                // console.log(user);
-                setEmail("")
-                setPassword("")
+
+
+                handleReset()
                 navigate("/login")
                 // ...
             })
@@ -128,7 +116,7 @@ const Form = ({ title, type }) => {
                 // console.log(errorCode, errorMessage);
 
                 toast.error(errorMessage, { position: "top-center", autoClose: 2000 })
-                // ..
+
             });
     }
 
@@ -144,18 +132,18 @@ const Form = ({ title, type }) => {
                     <br />
                     <form onSubmit={type === "login" ? handleLogin : handleRegister}>
                         <TextField fullWidth size="medium"
-                            // onBlur={handleBlur}
-                            id="email" name="email" value={email} onChange={handleEmailChange} label="Email" type="email" required sx={{}}
-                        // error={errors.email && touched.email}
+                            onBlur={handleBlur}
+                            id="email" name="email" value={values.email} onChange={handleChange} label="Email" type="email" required sx={{}}
+                            error={errors.email && touched.email}
 
                         />
-                        {/* {errors.email && touched.email && <Typography color="error" variant="p" component="p">{errors.email}</Typography>} */}
+                        {errors.email && touched.email && <Typography color="error" variant="p" component="p">{errors.email}</Typography>}
                         <TextField fullWidth size="medium"
-                            // onBlur={handleBlur}
-                            id="password" name="password" value={password} onChange={handlePasswordChange} label="Password" type="password" required sx={{ marginTop: "20px" }}
-                        // error={errors.password && touched.password}
+                            onBlur={handleBlur}
+                            id="password" name="password" value={values.password} onChange={handleChange} label="Password" type="password" required sx={{ marginTop: "20px" }}
+                            error={errors.password && touched.password}
                         />
-                        {/* {errors.password && touched.password && <Typography color="error" variant="p" component="p">{errors.password}</Typography>} */}
+                        {errors.password && touched.password && <Typography color="error" variant="p" component="p">{errors.password}</Typography>}
                         <br />
                         <Button type="submit" variant="contained" color="primary" sx={{ marginTop: "20px" }}>{type}</Button>
                         <Button type="submit" variant="contained" color="secondary" sx={{ marginTop: "20px", marginLeft: "20px" }}

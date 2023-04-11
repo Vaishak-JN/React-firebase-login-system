@@ -39,7 +39,7 @@ function Home() {
                 </Typography>
 
                 <Typography variant="h5" component="h5">
-                    Made using React, Redux Toolkit, Firebase, React Router, React Toastify and Material UI
+                    Made using React, Redux Toolkit, Material UI, React Router,React Toastify, Formik, Yup and Firebase
                 </Typography>
 
 
