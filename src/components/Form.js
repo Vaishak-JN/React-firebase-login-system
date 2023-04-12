@@ -148,7 +148,7 @@ const Form = ({ title, type }) => {
 
                         <Button type="submit" variant="contained" color="primary" sx={{ marginTop: "20px" }} >{type}</Button>
 
-                        <Button type="submit" variant="contained" color="secondary" sx={{ marginTop: "20px", marginLeft: "20px" }}
+                        <Button type="submit" variant="contained" sx={{ marginTop: "20px", marginLeft: "20px", backgroundColor: "#263238" }}
                             onClick={() => navigate(type === "login" ? "/register" : "/login")}
                         >
                             {type === "login" ? "Register" : "Login"}
